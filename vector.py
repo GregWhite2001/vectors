@@ -10,6 +10,7 @@ from cmath import sqrt
 from math import asin, sin
 import sympy as sym
 COMPONENT_FORM = True
+sym.init_printing(use_unicode=True)
 #making t global for referencing it everywhere
 global t
 t = sym.symbols('t')
@@ -97,7 +98,7 @@ class Vector:
             return False
 
     def magnitude(self):
-        return ((self._x)**2 + (self._y)**2 + (self._z)**2)**(1/2)
+        return sym.sqrt((self._x)**2 + (self._y)**2 + (self._z)**2)
         #working on this
         '''if mag > int(mag) and mag < int(mag)+1:
             return mag
@@ -136,4 +137,4 @@ class Vector:
         return R
 
     def arcLength(self, a, b):
-        return (sym.integrate(Vector.magnitude(self)),t, a, b)
+        return (sym.integrate(sym.simplify(Vector.magnitude(self)),(t,a,b)))

@@ -2,6 +2,7 @@ from vector import Vector
 import sympy as sym
 
 ##################### MAIN ######################
+sym.init_printing(use_unicode=True)
 t = sym.symbols('t')
 
 print("------------------Constant Vectors---------------")
@@ -43,7 +44,7 @@ print(r2)
 print(r3)
 
 print("------------------Differentiating Vector Functions---------------")
-dr = Vector.differentiate(r2)
+dr = Vector.differentiate(r3)
 print(dr)
 print(Vector.differentiate(Vector(sym.cos(t), sym.exp(t), t)))
 print(Vector.differentiate(Vector(t*sym.cos(t), sym.exp(t)/t, t)))
