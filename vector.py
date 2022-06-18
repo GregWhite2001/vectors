@@ -6,14 +6,22 @@
 ################################################
 
 #might need this, don't know yet
-from cmath import sqrt
-from math import asin, sin
+from cmath import acos
+from math import asin, sin, cos
+from re import U
 import sympy as sym
 COMPONENT_FORM = True
 sym.init_printing(use_unicode=True)
 #making t global for referencing it everywhere
 global t
+global u
+global v
 t = sym.symbols('t')
+u = sym.symbols('u')
+v = sym.symbols('v')
+x = sym.symbols('x')
+y = sym.symbols('y')
+z = sym.symbols('z')
 class Vector:
 
     
@@ -85,8 +93,8 @@ class Vector:
     def crossProduct(self, other):
         new_vect = Vector()
         new_vect._x = self._y * other._z - self._z * other._y
-        new_vect._x = self._z * other._x - self._x * other._z
-        new_vect._x = self._x * other._y - self._y * other._x
+        new_vect._y = self._z * other._x - self._x * other._z
+        new_vect._z = self._x * other._y - self._y * other._x
         return new_vect
 
     #checks if two vectors are orthogonal if the dot product of
@@ -98,7 +106,7 @@ class Vector:
             return False
 
     def magnitude(self):
-        return sym.sqrt((self._x)**2 + (self._y)**2 + (self._z)**2)
+        return sym.simplify(sym.sqrt((self._x)**2 + (self._y)**2 + (self._z)**2))
         #working on this
         '''if mag > int(mag) and mag < int(mag)+1:
             return mag
@@ -115,28 +123,63 @@ class Vector:
             return False
 
     #also working on this 
-    '''def crossProductMagnitude(self, other):
-        return (Vector.magnitude(self) * Vector.magnitude(other)) * sin(
-            asin(Vector.magnitude(Vector.crossProduct(self,other))/
-            (Vector.magnitude(other)*Vector.magnitude(self))))'''
+    #def crossProductMagnitude(self, other):
+     #   theta = acos(Vector.dotProduct(self,other))/(Vector.magnitude(self)*Vector.magnitude(other))
+      #  return (Vector.magnitude(self)*Vector.magnitude(other)*cos(theta))
 
     #differentiate a vector function
-    def differentiate(self):
-        print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
+    def differentiate(self, var):
+        #print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
         Dr = Vector()
-        Dr._x = sym.diff(self._x)
-        Dr._y = sym.diff(self._y)
-        Dr._z = sym.diff(self._z)
+        Dr._x = sym.diff(self._x, var)
+        Dr._y = sym.diff(self._y, var)
+        Dr._z = sym.diff(self._z, var)
         return Dr
 
     #integrate a vector function
-    def integrate(self):
-        print(f"\u222Br(t)dt = <\u222B{self._x}dt,\u222B{self._y}dt,\u222B{self._z}dt>")
+    def integrate(self, var):
+        C = sym.symbols('C')
+        #print(f"\u222Br(t)dt = <\u222B{self._x}dt,\u222B{self._y}dt,\u222B{self._z}dt>")
         R = Vector()
-        R._x = sym.integrate(self._x,t)
-        R._y = sym.integrate(self._y,t)
-        R._z = sym.integrate(self._z,t)
+        R._x = sym.integrate(self._x,var) + C
+        R._y = sym.integrate(self._y,var) + C
+        R._z = sym.integrate(self._z,var) + C
         return R
 
+    #calculates arclength of a curve on [a,b] parameterized by r(t)
     def arcLength(self, a, b):
-        return (sym.integrate(Vector.magnitude(self)),(t, a, b))
+        return sym.integrate(Vector.magnitude(self),(t, a, b))
+
+    def surfaceArea(self, a, b, c, d):
+        r_u = Vector.differentiate(self, u)
+        r_v = Vector.differentiate(self, v)
+        jac = Vector.magnitude(Vector.crossProduct(r_u,r_v))
+        return sym.integrate(jac, (u, a, b), (v, c, d))
+
+    def divergence(self):
+        return sym.diff(self._x,x)+sym.diff(self._y,y)+sym.diff(self._z,z)
+
+    def curl(self):
+        curl_F = Vector()
+        curl_F._x = sym.diff(self._z,y) - sym.diff(self._y,z)
+        curl_F._y = sym.diff(self._x,z) -  sym.diff(self._z,x)
+        curl_F._z = sym.diff(self._y,x) - sym.diff(self._x,y)
+        return curl_F
+
+    def isConservative(self):
+        curl_F = Vector.curl(self)
+        if curl_F._x == 0 and curl_F._y == 0 and curl_F._z == 0:
+            return True
+        else:
+            return False
+
+    def findFunction(self):
+        C = sym.symbols("C")
+        if Vector.isConservative(self):
+            fx = sym.integrate(self._x, x)
+            fy = sym.integrate(self._y, y)
+            fz = sym.integrate(self._z, z)
+            return fx + fy + fz + C
+        else:
+            return "Not conservative"
+        

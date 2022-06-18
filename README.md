@@ -7,7 +7,6 @@ This folder contains:
 1. vector.py (class file)
 2. vectorTest.py (test file for the vector class)
 
-
 --------------vector.py--------------
 
 Features:
@@ -22,6 +21,7 @@ Features:
 9. vector functions (r(t)=<x(t),y(t),z(t))
 10. Differentiation of vector functions
 11. Integration of vector functions
+12. Support for parametric surfaces
 
 WIP:
 1. Cross product magnitude
@@ -29,7 +29,7 @@ WIP:
 Desired Features:
 1. Find the angle between two vector
 2. calculus on vector functions
-    a. arclength (hopefully)
+    a. vector fields
     b. curvature
 
 --------------vectorTest.py--------------

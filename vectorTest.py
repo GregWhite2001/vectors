@@ -1,21 +1,23 @@
+from numpy import gradient
 from vector import Vector
 import sympy as sym
 
 ##################### MAIN ######################
 sym.init_printing(use_unicode=True)
 t = sym.symbols('t')
+u = sym.symbols('u')
+v = sym.symbols('v')
+
 
 print("------------------Constant Vectors---------------")
-vect = Vector(1,1,1)
-vect2= Vector(1,2,3.5)
+vect1 = Vector(1,1,1)
+vect2 = Vector(1,2,3.5)
+print(f"Here is a constant vector: vect1: {str(vect1)}")
+print(f"Here is another constant vector: vect2: {str(vect2)}")
 
 print("------------------Vector Addition---------------")
-vect3 = Vector.addVector(vect,vect2)
-
-print(vect)
-print(vect3)
-
-
+vect3 = Vector.addVector(vect1,vect2)
+print(f"vect1 + vect2 = {str(vect1)} + {str(vect2)} = {str(vect3)}")
 vect4 = Vector(1,0,1)
 vect5 = Vector(1,0,-1)
 
@@ -23,19 +25,19 @@ print("------------------Vector Subtraction---------------")
 print(f"vect4 - vect5 = {str(vect4)} - {str(vect5)} = {str(Vector.subtractVector(vect4,vect5))}")
 print(f"vect5 - vect4 = {str(vect5)} - {str(vect4)} = {str(Vector.subtractVector(vect5,vect4))}")
 print("------------------Dot Product---------------")
-print(f"The vectors vect4 and vect2 are orthogonal ({Vector.isOrthogonal(vect4,vect2)})")
-print(f"The dot product of vect and vect2 is: {Vector.dotProduct(vect,vect2)}")
-print(f"The vectors vect and vect2 are orthogonal ({Vector.isOrthogonal(vect,vect2)})")
+print(f"vect \u2022 vect2 = {Vector.dotProduct(vect1,vect2)}")
+print(f"The vectors vect4 and vect2 are orthogonal. ({Vector.isOrthogonal(vect4,vect2)})")
+print(f"The vectors vect and vect2 are orthogonal. ({Vector.isOrthogonal(vect1,vect2)})")
 
 print("-----------------Cross Product---------------")
 vect6 = Vector.crossProduct(vect4,vect2)
-
-print(f"The cross product of vect4 and vect2 is {str(vect6)}")
-print(Vector.magnitude(vect6))
+print(f"vect4 \u00D7 vect2 = {str(vect6)}")
+print(f"The magnitude of the cross product of vect4 and vect2 is:{Vector.magnitude(vect6)}")
 print(f"The vectors and vect4 and vect5 are parallel. ({Vector.isParallel(vect4,vect5)})")
-
 print(f"The magnitude of vect6 is: {str(Vector.magnitude(vect6))}")
+#print()
 #print(Vector.crossProductMagnitude(vect4,vect3))
+#print()
 print(f"vect2 = {str(vect2)}")
 print(f"The magnitude of vect2 is: {str(Vector.magnitude(vect2))}")
 
@@ -51,13 +53,35 @@ print(f"r(t) = {str(r2)}")
 print(f"r(t) = {str(r3)}")
 
 print("------------------Differentiating Vector Functions---------------")
-dr = Vector.differentiate(r3)
+dr = Vector.differentiate(r3,t)
 print(f"r'(t) = {str(dr)}")
-print(f"r'(t) = {str(Vector.differentiate(Vector(sym.cos(t), sym.exp(t), t)))}")
-print(f"r'(t) = {str(Vector.differentiate(Vector(t*sym.cos(t), sym.exp(t)/t, t)))}")
+print(f"r'(t) = {str(Vector.differentiate(Vector(sym.cos(t), sym.exp(t), t),t))}")
+print(f"r'(t) = {str(Vector.differentiate(Vector(t*sym.cos(t), sym.exp(t)/t, t),t))}")
 
 print("------------------Integrating Vector Functions---------------")
-print(f"R(t) = {str(Vector.integrate(Vector(t, 1, 3*t**2)))}")
+print(f"R(t) = {str(Vector.integrate(Vector(t, 1, 3*t**2),t))}")
 print(Vector.magnitude(dr))
-print(Vector.arcLength(dr, 0, 1))
+print(f"Arclength, S, on interval [1,0] of C: r(t) = {str(r3)}: S = {Vector.arcLength(dr, 0, 1)}")
 #print(type(vect2.z))
+
+print("------------------Vector Fields---------------")
+#TODO
+x = sym.symbols('x')
+y = sym.symbols('y')
+z = sym.symbols('z')
+
+VF1 = Vector(x*y,x**2*z,y*z)
+print(VF1)
+print(Vector.divergence(VF1))
+print(Vector.curl(VF1))
+VF2 = Vector(2*x,2*y,2*z)
+print(Vector.findFunction(VF2))
+print("------------------Parametric Surfaces---------------")
+rs1 = Vector(u, v, u+v)
+print(f"Parametric surface r(u,v) = {str(rs1)}")
+rs1_u = Vector.differentiate(rs1, u)
+print(f"Partial derivative of r(u,v) with respect to u: r_u = {str(rs1_u)}")
+rs1_v = Vector.differentiate(rs1,v)
+print(f"Partial derivative of r(u,v) with respect to v: r_v = {str(rs1_v)}")
+print(f"The cross product of r_u \u00D7 r_v = {Vector.crossProduct(rs1_u,rs1_v)}")
+print(Vector.surfaceArea(rs1,0,1,0,1))
