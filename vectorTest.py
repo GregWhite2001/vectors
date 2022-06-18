@@ -14,18 +14,25 @@ vect3 = Vector.addVector(vect,vect2)
 
 print(vect)
 print(vect3)
-print(Vector.dotProduct(vect,vect2))
-print(Vector.isOrthogonal(vect,vect2))
+
 
 vect4 = Vector(1,0,1)
 vect5 = Vector(1,0,-1)
 
-print(Vector.isOrthogonal(vect4,vect2))
+print("------------------Vector Subtraction---------------")
+print(f"vect4 - vect5 = {str(vect4)} - {str(vect5)} = {str(Vector.subtractVector(vect4,vect5))}")
+print(f"vect5 - vect4 = {str(vect5)} - {str(vect4)} = {str(Vector.subtractVector(vect5,vect4))}")
+print("------------------Dot Product---------------")
+print(f"The vectors vect4 and vect2 are orthogonal ({Vector.isOrthogonal(vect4,vect2)})")
+print(f"The dot product of vect and vect2 is: {Vector.dotProduct(vect,vect2)}")
+print(f"The vectors vect and vect2 are orthogonal ({Vector.isOrthogonal(vect,vect2)})")
+
+print("-----------------Cross Product---------------")
 vect6 = Vector.crossProduct(vect4,vect2)
 
-print(vect6)
+print(f"The cross product of vect4 and vect2 is {str(vect6)}")
 print(Vector.magnitude(vect6))
-print(f"The vectors and vect4 and vect5 are parallel. ({str(Vector.isParallel(vect4,vect5))})")
+print(f"The vectors and vect4 and vect5 are parallel. ({Vector.isParallel(vect4,vect5)})")
 
 print(f"The magnitude of vect6 is: {str(Vector.magnitude(vect6))}")
 #print(Vector.crossProductMagnitude(vect4,vect3))
@@ -45,12 +52,12 @@ print(f"r(t) = {str(r3)}")
 
 print("------------------Differentiating Vector Functions---------------")
 dr = Vector.differentiate(r3)
-print("r'(t) =" + str(dr))
-print("r'(t) = "  + str(Vector.differentiate(Vector(sym.cos(t), sym.exp(t), t))))
-print("r'(t) = " + str(Vector.differentiate(Vector(t*sym.cos(t), sym.exp(t)/t, t))))
+print(f"r'(t) = {str(dr)}")
+print(f"r'(t) = {str(Vector.differentiate(Vector(sym.cos(t), sym.exp(t), t)))}")
+print(f"r'(t) = {str(Vector.differentiate(Vector(t*sym.cos(t), sym.exp(t)/t, t)))}")
 
 print("------------------Integrating Vector Functions---------------")
-print("R(t) = " + str(Vector.integrate(Vector(t, 1, 3*t**2))))
+print(f"R(t) = {str(Vector.integrate(Vector(t, 1, 3*t**2)))}")
 print(Vector.magnitude(dr))
 print(Vector.arcLength(dr, 0, 1))
 #print(type(vect2.z))

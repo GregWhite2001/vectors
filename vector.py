@@ -74,7 +74,7 @@ class Vector:
         new_vect = Vector()
         new_vect.x = self._x - other._x
         new_vect.y = self._y - other._y
-        new_vect.z = self._x - other._z
+        new_vect.z = self._z - other._z
         return new_vect
 
     #dot product, returns scalar value
@@ -139,4 +139,4 @@ class Vector:
         return R
 
     def arcLength(self, a, b):
-        return (sym.integrate(Vector.magnitude(self)),t, a, b)
+        return (sym.integrate(Vector.magnitude(self)),(t, a, b))
