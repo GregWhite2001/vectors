@@ -122,6 +122,7 @@ class Vector:
 
     #differentiate a vector function
     def differentiate(self):
+        print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
         Dr = Vector()
         Dr._x = sym.diff(self._x)
         Dr._y = sym.diff(self._y)
@@ -130,6 +131,7 @@ class Vector:
 
     #integrate a vector function
     def integrate(self):
+        print(f"\u222Br(t)dt = <\u222B{self._x}dt,\u222B{self._y}dt,\u222B{self._z}dt>")
         R = Vector()
         R._x = sym.integrate(self._x,t)
         R._y = sym.integrate(self._y,t)
@@ -137,4 +139,4 @@ class Vector:
         return R
 
     def arcLength(self, a, b):
-        return (sym.integrate(sym.simplify(Vector.magnitude(self)),(t,a,b)))
+        return (sym.integrate(Vector.magnitude(self)),t, a, b)
