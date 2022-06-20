@@ -8,7 +8,6 @@
 #might need this, don't know yet
 from cmath import acos
 from math import asin, sin, cos
-from re import U
 import sympy as sym
 COMPONENT_FORM = True
 sym.init_printing(use_unicode=True)
@@ -102,16 +101,11 @@ class Vector:
     def isOrthogonal(self,other):
         if Vector.dotProduct(self,other) == 0:
             return True
-        else:
-            return False
+        return False
 
+    #determines the magnitude of a vector
     def magnitude(self):
         return sym.simplify(sym.sqrt((self._x)**2 + (self._y)**2 + (self._z)**2))
-        #working on this
-        '''if mag > int(mag) and mag < int(mag)+1:
-            return mag
-        else:
-            return int(mag)'''
         
     #checking if two vectors are parallel by checking if their cross product
     #is equal to the zero vector
@@ -119,42 +113,72 @@ class Vector:
         test_vect = Vector.crossProduct(self, other)
         if(test_vect._x == 0 and test_vect._y == 0 and test_vect._z == 0):
             return True
-        else:
-            return False
+        return False
 
     #also working on this 
-    #def crossProductMagnitude(self, other):
-     #   theta = acos(Vector.dotProduct(self,other))/(Vector.magnitude(self)*Vector.magnitude(other))
-      #  return (Vector.magnitude(self)*Vector.magnitude(other)*cos(theta))
+    def crossProductMagnitude(self, other):
+        theta = abs(sym.acos(Vector.dotProduct(self,other))/(Vector.magnitude(self)*Vector.magnitude(other)))
+        return (Vector.magnitude(self)*Vector.magnitude(other)*cos(theta))
+
+    
+class VectorFunction(Vector):
+    def __init__(self,xt=0, yt=0, zt=0):
+        super(VectorFunction, self).__init__(xt,yt,zt)
 
     #differentiate a vector function
-    def differentiate(self, var):
-        #print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
+    def differentiate(self):
+        print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
         Dr = Vector()
-        Dr._x = sym.diff(self._x, var)
-        Dr._y = sym.diff(self._y, var)
-        Dr._z = sym.diff(self._z, var)
+        Dr._x = sym.diff(self._x, t)
+        Dr._y = sym.diff(self._y, t)
+        Dr._z = sym.diff(self._z, t)
         return Dr
 
     #integrate a vector function
-    def integrate(self, var):
+    def integrate(self):
         C = sym.symbols('C')
-        #print(f"\u222Br(t)dt = <\u222B{self._x}dt,\u222B{self._y}dt,\u222B{self._z}dt>")
+        print(f"\u222Br(t)dt = <\u222B{self._x}dt,\u222B{self._y}dt,\u222B{self._z}dt>")
         R = Vector()
-        R._x = sym.integrate(self._x,var) + C
-        R._y = sym.integrate(self._y,var) + C
-        R._z = sym.integrate(self._z,var) + C
+        R._x = sym.integrate(self._x,t) + C
+        R._y = sym.integrate(self._y,t) + C
+        R._z = sym.integrate(self._z,t) + C
         return R
 
     #calculates arclength of a curve on [a,b] parameterized by r(t)
     def arcLength(self, a, b):
         return sym.integrate(Vector.magnitude(self),(t, a, b))
 
+class ParametricSurface(Vector):
+    def __init__(self,xuv=0,yuv=0,zuv=0):
+        super(ParametricSurface, self).__init__(xuv,yuv,zuv)
+
+
+    def differentiate(self, var):
+        print(f"D{var}(r(u,v)) = <D{var}({self._x},D{var}({self._y},D{var}({self._z}>")
+        Dr = Vector()
+        Dr._x = sym.diff(self._x, var)
+        Dr._y = sym.diff(self._y, var)
+        Dr._z = sym.diff(self._z, var)
+        return Dr
+
+    def integrate(self, var):
+        C = sym.symbols('C')
+        print(f"\u222Br(u,v)d{var} = <\u222B{self._x}d{var},\u222B{self._y}d{var},\u222B{self._z}d{var}>")
+        R = Vector()
+        R._x = sym.integrate(self._x,var) + C
+        R._y = sym.integrate(self._y,var) + C
+        R._z = sym.integrate(self._z,var) + C
+        return R
+
     def surfaceArea(self, a, b, c, d):
-        r_u = Vector.differentiate(self, u)
-        r_v = Vector.differentiate(self, v)
+        r_u = ParametricSurface.differentiate(self, u)
+        r_v = ParametricSurface.differentiate(self, v)
         jac = Vector.magnitude(Vector.crossProduct(r_u,r_v))
         return sym.integrate(jac, (u, a, b), (v, c, d))
+
+class VectorField(Vector):
+    def __init__(self,p=0,q=0,r=0):
+        super(VectorField, self).__init__(p,q,r)
 
     def divergence(self):
         return sym.diff(self._x,x)+sym.diff(self._y,y)+sym.diff(self._z,z)
@@ -167,19 +191,16 @@ class Vector:
         return curl_F
 
     def isConservative(self):
-        curl_F = Vector.curl(self)
+        curl_F = VectorField.curl(self)
         if curl_F._x == 0 and curl_F._y == 0 and curl_F._z == 0:
             return True
-        else:
-            return False
+        return False
 
     def findFunction(self):
         C = sym.symbols("C")
-        if Vector.isConservative(self):
+        if VectorField.isConservative(self):
             fx = sym.integrate(self._x, x)
             fy = sym.integrate(self._y, y)
             fz = sym.integrate(self._z, z)
             return fx + fy + fz + C
-        else:
-            return "Not conservative"
-        
+        return "Not conservative"

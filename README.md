@@ -22,6 +22,12 @@ Features:
 10. Differentiation of vector functions
 11. Integration of vector functions
 12. Support for parametric surfaces
+13. Vector fields
+14. Divergence
+15. Curl
+16. Check if a VF is conservative
+17. Finding f such that gradient*F
+18. Surface are over rectangular regions
 
 WIP:
 1. Cross product magnitude
