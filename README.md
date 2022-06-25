@@ -35,8 +35,7 @@ Features:
 Desired Features:
 1. Find the angle between two vectors
 2. calculus on vector functions
-    a. vector fields
-    b. curvature
+     (only missing curvature)
 
 --------------vectorTest.py--------------
 
