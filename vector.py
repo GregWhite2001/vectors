@@ -12,9 +12,6 @@ import sympy as sym
 COMPONENT_FORM = True
 sym.init_printing(use_unicode=True)
 #making t global for referencing it everywhere
-global t
-global u
-global v
 t = sym.symbols('t')
 u = sym.symbols('u')
 v = sym.symbols('v')
@@ -127,7 +124,7 @@ class VectorFunction(Vector):
 
     #differentiate a vector function
     def differentiate(self):
-        print(f"D(r(t)) = <D({self._x},D({self._y},D({self._z}>")
+        print(f"D(r(t)) = <D({self._x}),D({self._y}),D({self._z})>")
         Dr = Vector()
         Dr._x = sym.diff(self._x, t)
         Dr._y = sym.diff(self._y, t)
@@ -154,7 +151,7 @@ class ParametricSurface(Vector):
 
 
     def differentiate(self, var):
-        print(f"D{var}(r(u,v)) = <D{var}({self._x},D{var}({self._y},D{var}({self._z}>")
+        print(f"D{var}(r(u,v)) = <D{var}({self._x}),D{var}({self._y}),D{var}({self._z})>")
         Dr = Vector()
         Dr._x = sym.diff(self._x, var)
         Dr._y = sym.diff(self._y, var)
@@ -204,3 +201,36 @@ class VectorField(Vector):
             fz = sym.integrate(self._z, z)
             return fx + fy + fz + C
         return "Not conservative"
+
+
+    def composition(self,other):
+        VF = VectorField(self._x, self._y, self._z)
+         #composing r(t) at P
+        if type(self._x) != int:
+            if sym.compose(self._x,other._x) != 0:
+                VF._x = sym.compose(VF._x, other._x)
+            if sym.compose(self._x,other._y) != 0:
+                VF._x = sym.compose(VF._x, other._y)
+            if sym.compose(self._x,other._z) != 0:
+                VF._x = sym.compose(VF._x, other._z)
+        #composing r(t) at Q
+        if type(self._y) != int:
+            if sym.compose(self._y,other._x) != 0:
+                VF._y = sym.compose(VF._y, other._x)
+            if sym.compose(self._y,other._y) != 0:
+                VF._y = sym.compose(VF._y, other._y)
+            if sym.compose(self._y,other._z) != 0:
+                VF._y = sym.compose(VF._y, other._z)
+        #composing r(t) at R
+        if type(self._z) != int:
+            if sym.compose(self._z,other._x) != 0:
+                VF._z = sym.compose(VF._z, other._x)
+            if sym.compose(self._z,other._y) != 0:
+                VF._z = sym.compose(VF._z, other._y)
+            if sym.compose(self._z,other._z) != 0:
+                VF._z = sym.compose(VF._z, other._z)
+        return VF
+
+    def workLineIntegral(self, other,a,b):
+        return sym.integrate(Vector.dotProduct(
+            VectorField.composition(self,other), VectorFunction.differentiate(other)),(t,a,b))

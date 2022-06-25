@@ -18,7 +18,7 @@ Features:
 6. Unit vector notation
 7. Checking if two vectors are orthogonal
 8. Checking if two vectors are parallel
-9. vector functions (r(t)=<x(t),y(t),z(t))
+9. vector functions (r(t)=<x(t),y(t),z(t)>)
 10. Differentiation of vector functions
 11. Integration of vector functions
 12. Support for parametric surfaces
@@ -27,13 +27,13 @@ Features:
 15. Curl
 16. Check if a VF is conservative
 17. Finding f such that gradient*F
-18. Surface are over rectangular regions
+18. Surface are over rectangular region
+19. Work line integrals (dependent on how well composition works)
+20. Composition of curves onto vector fields (mostly works)
 
-WIP:
-1. Cross product magnitude
 
 Desired Features:
-1. Find the angle between two vector
+1. Find the angle between two vectors
 2. calculus on vector functions
     a. vector fields
     b. curvature
