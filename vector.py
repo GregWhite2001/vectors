@@ -59,7 +59,7 @@ class Vector:
         self._z = value
 
     #magic string function
-    #has the option for unit vector component form
+    #has the option for unit vector notation
     def __str__(self):
         if COMPONENT_FORM == False:
             return f"({self._x})i+({self._y})j+({self._z})k"
@@ -117,7 +117,7 @@ class Vector:
         theta = abs(sym.acos(Vector.dotProduct(self,other))/(Vector.magnitude(self)*Vector.magnitude(other)))
         return (Vector.magnitude(self)*Vector.magnitude(other)*cos(theta))
 
-    
+#vector function subclass that inherits from the vector class
 class VectorFunction(Vector):
     def __init__(self,xt=0, yt=0, zt=0):
         super(VectorFunction, self).__init__(xt,yt,zt)
@@ -145,6 +145,7 @@ class VectorFunction(Vector):
     def arcLength(self, a, b):
         return sym.integrate(Vector.magnitude(self),(t, a, b))
 
+#parametric surface 
 class ParametricSurface(Vector):
     def __init__(self,xuv=0,yuv=0,zuv=0):
         super(ParametricSurface, self).__init__(xuv,yuv,zuv)
@@ -180,6 +181,9 @@ class VectorField(Vector):
     def divergence(self):
         return sym.diff(self._x,x)+sym.diff(self._y,y)+sym.diff(self._z,z)
 
+    #compute the curl of a vector field
+    #due to limitations of sympy, you can't really
+    #do the built in curl if there is one for use with my vector class
     def curl(self):
         curl_F = Vector()
         curl_F._x = sym.diff(self._z,y) - sym.diff(self._y,z)
@@ -187,12 +191,15 @@ class VectorField(Vector):
         curl_F._z = sym.diff(self._y,x) - sym.diff(self._x,y)
         return curl_F
 
+    #use curl to determine if a vector field is conservative
+    #the curl of a conservative vector field is the zero vector
     def isConservative(self):
         curl_F = VectorField.curl(self)
         if curl_F._x == 0 and curl_F._y == 0 and curl_F._z == 0:
             return True
         return False
 
+    #find a function f such that (gradient)*f = F
     def findFunction(self):
         C = sym.symbols("C")
         if VectorField.isConservative(self):
@@ -202,10 +209,12 @@ class VectorField(Vector):
             return fx + fy + fz + C
         return "Not conservative"
 
-
+    #work in progress
     def composition(self,other):
         VF = VectorField(self._x, self._y, self._z)
          #composing r(t) at P
+         #going to find a better way to do this
+         #hopefully :)
         if type(self._x) != int:
             if sym.compose(self._x,other._x) != 0:
                 VF._x = sym.compose(VF._x, other._x)
@@ -231,6 +240,7 @@ class VectorField(Vector):
                 VF._z = sym.compose(VF._z, other._z)
         return VF
 
+    #work in progress
     def workLineIntegral(self, other,a,b):
         return sym.integrate(Vector.dotProduct(
             VectorField.composition(self,other), VectorFunction.differentiate(other)),(t,a,b))
