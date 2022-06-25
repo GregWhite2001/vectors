@@ -83,6 +83,7 @@ print(f"The cross product of r_u \u00D7 r_v = {Vector.crossProduct(rs1_u,rs1_v)}
 print(f"The surface area (\u222C_s dS), of the surface S parameterized by r(u,v) = rs1 over the rectangular region [0,1] \u00D7 [0,1] : {ParametricSurface.surfaceArea(rs1,0,1,0,1)}")
 print(f"Ru(u,v) = {ParametricSurface.integrate(rs1,u)}")
 print(f"Rv(u,v) = {ParametricSurface.integrate(rs1,v)}")
+#going to clean this up a bit
 VF3 = VectorField(x*y,x,2)
 print(VectorField.composition(VF3, VectorFunction(t,t,0)))
 print(VectorField.workLineIntegral(VectorField(x,y,z**2),VectorFunction(t,t,t**2),1,5))
