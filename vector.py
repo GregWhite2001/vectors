@@ -5,9 +5,7 @@
 # vectors and their operations
 ################################################
 
-#might need this, don't know yet
-from cmath import acos
-from math import asin, sin, cos
+
 import sympy as sym
 COMPONENT_FORM = True
 sym.init_printing(use_unicode=True)
@@ -112,10 +110,6 @@ class Vector:
             return True
         return False
 
-    #also working on this 
-    def crossProductMagnitude(self, other):
-        theta = abs(sym.acos(Vector.dotProduct(self,other))/(Vector.magnitude(self)*Vector.magnitude(other)))
-        return (Vector.magnitude(self)*Vector.magnitude(other)*cos(theta))
 
 #vector function subclass that inherits from the vector class
 class VectorFunction(Vector):

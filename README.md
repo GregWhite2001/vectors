@@ -30,12 +30,12 @@ Features:
 18. Surface are over rectangular region
 19. Work line integrals (dependent on how well composition works)
 20. Composition of curves onto vector fields (mostly works)
+21. Added support for plotting graphs of curves and surfaces
 
 
 Desired Features:
-1. Find the angle between two vectors
-2. calculus on vector functions
-     (only missing curvature)
+TBD
+
 
 --------------vectorTest.py--------------
 
