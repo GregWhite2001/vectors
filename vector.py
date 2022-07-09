@@ -7,6 +7,7 @@
 
 
 import sympy as sym
+from sympy.plotting import plot3d_parametric_line, plot3d_parametric_surface
 COMPONENT_FORM = True
 sym.init_printing(use_unicode=True)
 #making t global for referencing it everywhere
@@ -139,6 +140,12 @@ class VectorFunction(Vector):
     def arcLength(self, a, b):
         return sym.integrate(Vector.magnitude(self),(t, a, b))
 
+    def plotCurve(self):
+        if self._z == 0:
+            sym.plot_parametric((self._x,self._y), (t,-5,5))
+        else:
+            plot3d_parametric_line(self._x, self._y,self._z, (t, -5, 5))
+
 #parametric surface 
 class ParametricSurface(Vector):
     def __init__(self,xuv=0,yuv=0,zuv=0):
@@ -167,6 +174,9 @@ class ParametricSurface(Vector):
         r_v = ParametricSurface.differentiate(self, v)
         jac = Vector.magnitude(Vector.crossProduct(r_u,r_v))
         return sym.integrate(jac, (u, a, b), (v, c, d))
+
+    def plotSurface(self):
+        plot3d_parametric_surface(self._x,self._y,self._z,(u,-5,5),(v,-5,5))
 
 class VectorField(Vector):
     def __init__(self,p=0,q=0,r=0):
