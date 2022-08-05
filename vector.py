@@ -189,7 +189,7 @@ class VectorField(Vector):
     #due to limitations of sympy, you can't really
     #do the built in curl if there is one for use with my vector class
     def curl(self):
-        curl_F = Vector()
+        curl_F = VectorField()
         curl_F._x = sym.diff(self._z,y) - sym.diff(self._y,z)
         curl_F._y = sym.diff(self._x,z) -  sym.diff(self._z,x)
         curl_F._z = sym.diff(self._y,x) - sym.diff(self._x,y)
@@ -214,6 +214,8 @@ class VectorField(Vector):
         return "Not conservative"
 
     #work in progress
+    #in its current state, it's extremely ineffecient and has it's own set of prpblems
+    #need to find a better way to do this
     def composition(self,other):
         VF = VectorField(self._x, self._y, self._z)
          #composing r(t) at P
